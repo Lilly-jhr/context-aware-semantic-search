@@ -1,0 +1,33 @@
+# Core LangChain
+langchain
+langchain-community
+langchain-core
+
+# UI Framework
+streamlit
+
+# Embeddings (Open Source)
+sentence-transformers
+
+# LLMs (Open Source - for later steps, but good to have placeholder)
+# For local LLM inference using Ollama
+# langchain-ollama
+
+# Vector Stores (Open Source - for later steps)
+faiss-cpu
+
+# Document Loaders (Open Source)
+pypdf              # For PDF loading
+unstructured       # For generic file loading (TXT, DOCX, etc.)
+python-magic       # Dependency for unstructured
+python-dotenv      # For environment variables
+
+# NLP (Open Source - for later steps)
+# spacy
+# nltk
+
+# Visualization (Open Source - for later steps)
+# umap-learn
+# scikit-learn # for t-SNE
+# plotly
+# matplotlib
