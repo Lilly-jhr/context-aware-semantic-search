@@ -18,10 +18,8 @@ def load_documents(uploaded_files: List[tempfile.SpooledTemporaryFile]) -> List[
     """
     all_documents = []
     for source_file in uploaded_files:
-        # Get the original filename
         source_filename = source_file.name
         
-        # Create a temporary file to store the uploaded content because many LangChain loaders expect a file path
         with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(source_filename)[1]) as tmp_file:
             tmp_file.write(source_file.getvalue())
             tmp_file_path = tmp_file.name
@@ -29,12 +27,11 @@ def load_documents(uploaded_files: List[tempfile.SpooledTemporaryFile]) -> List[
         try:
             if source_filename.lower().endswith(".pdf"):
                 loader = PyPDFLoader(tmp_file_path)
-                # PyPDFLoader loads each page as a separate document
-                # It automatically adds 'source' and 'page' to metadata
+                # PyPDFLoader loads each page as a separate document. It automatically adds 'source' and 'page' to metadata
                 docs_from_file = loader.load() 
-                # We can update the 'source' metadata to be more specific if needed
+                #
                 for doc in docs_from_file:
-                    doc.metadata["source"] = source_filename # Ensure source is the original filename
+                    doc.metadata["source"] = source_filename 
                 all_documents.extend(docs_from_file)
             elif source_filename.lower().endswith(".txt"):
                 loader = TextLoader(tmp_file_path, encoding="utf-8")
@@ -49,7 +46,7 @@ def load_documents(uploaded_files: List[tempfile.SpooledTemporaryFile]) -> List[
         except Exception as e:
             print(f"Error loading file {source_filename}: {e}")
         finally:
-            # Clean up the temporary file
+            #clean the temporary file
             os.remove(tmp_file_path)
             
     return all_documents
@@ -75,14 +72,12 @@ def split_documents(
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
         length_function=len,
-        add_start_index=True, # Adds the start index of the chunk in the original document
+        add_start_index=True, 
     )
     chunked_documents = text_splitter.split_documents(documents)
     return chunked_documents
 
-# Example usage (for testing this module directly)
 if __name__ == '__main__':    
-    # Create dummy Streamlit UploadedFile objects (simplified for testing)
     class MockUploadedFile:
         def __init__(self, name, content_bytes):
             self.name = name
@@ -91,7 +86,6 @@ if __name__ == '__main__':
         def getvalue(self):
             return self._content_bytes
 
-    # Create a dummy PDF file content (minimal valid PDF)
     dummy_pdf_content = b"%PDF-1.0\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj 2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj 3 0 obj<</Type/Page/MediaBox[0 0 3 3]>>endobj\nxref\n0 4\n0000000000 65535 f\n0000000010 00000 n\n0000000058 00000 n\n0000000112 00000 n\ntrailer<</Size 4/Root 1 0 R>>\nstartxref\n149\n%%EOF"
     
     dummy_files = [
@@ -107,16 +101,10 @@ if __name__ == '__main__':
     for i, doc in enumerate(loaded_docs):
         print(f"\nDocument {i+1} from '{doc.metadata.get('source', 'N/A')}':")
         print(f"Page: {doc.metadata.get('page', 'N/A')}")
-        # print(f"Content preview: {doc.page_content[:100]}...") # Careful with PDF binary
 
     if loaded_docs:
         print("\nSplitting documents...")
-        # For PDF, PyPDFLoader extracts text, so content is text
-        # For the dummy PDF above, PyPDFLoader might not extract text well, 
-        # a real PDF with text content is needed for good test of chunking.
-        # Let's assume PyPDFLoader successfully extracts text from a real PDF.
-        
-        # For this direct test, let's use a simpler text-based doc list for splitting demonstration
+
         simple_docs_for_splitting = [
             Document(page_content="This is the first sentence. This is the second sentence. This is the third. And a fourth.", metadata={"source": "test.txt"}),
             Document(page_content="Another document here. It's fairly short as well.", metadata={"source": "another.txt"})

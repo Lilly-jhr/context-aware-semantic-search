@@ -12,6 +12,7 @@ ENV/
 dist/
 build/
 *.spec
+.venv/
 
 # IDEs & OS-specific
 .vscode/
@@ -25,6 +26,7 @@ build/
 Thumbs.db
 
 # Data & Secrets - IMPORTANT
+data/
 data/uploads/*
 data/vector_stores/*
 *.sqlite3
