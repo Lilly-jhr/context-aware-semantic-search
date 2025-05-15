@@ -13,8 +13,8 @@ sentence-transformers
 # For local LLM inference using Ollama
 # langchain-ollama
 
-# Vector Stores (Open Source - for later steps)
-faiss-cpu
+# Vector Stores 
+chromadb
 
 # Document Loaders (Open Source)
 pypdf              # For PDF loading
