@@ -41,3 +41,5 @@ credentials.json
 
 # Streamlit
 .streamlit/
+
+model_cache_test_sbert/
